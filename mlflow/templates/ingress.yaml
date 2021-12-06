@@ -2,9 +2,9 @@
 {{- $fullName := include "mlflow.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 {{- else -}}
-apiVersion: extensions/v1beta1
+apiVersion: extensions/v1
 {{- end }}
 kind: Ingress
 metadata:
@@ -33,11 +33,14 @@ spec:
         {{- range .paths }}
           - path: {{ .path | quote }}
             backend:
-              serviceName: {{ default $fullName .serviceNameOverride }}
-              servicePort: {{ default $svcPort .servicePortOverride }}
+              service:
+                name: {{ default $fullName .serviceNameOverride }}
+                port:
+                  number: {{ default $svcPort .servicePortOverride }}
+            pathType: Prefix
         {{- end }}
     {{- if .host }}
-      host: {{ . | quote }}
+      host: {{ .host | quote }}
     {{- end }}
   {{- end }}
 {{- end }}
