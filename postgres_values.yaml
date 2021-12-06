@@ -1,0 +1,9 @@
+global:
+  postgresql:
+    postgresqlDatabase: mlflow
+    postgresqlUsername: mlflow
+    postgresqlPassword: password
+persistence:
+  storageClass: dominodisk
+  size: 30Gi
+  
