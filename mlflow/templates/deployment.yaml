@@ -51,6 +51,12 @@ spec:
           #     port: proxy
           resources:
             {{- toYaml .Values.proxyConfig.resources | nindent 12 }}
+          env:
+           - name: DOMINO_API_HOST
+             value: "http://nucleus-frontend.domino-platform:80"
+          volumeMounts:
+            - mountPath: "/mnt/mlflow"
+              name: mlflow-store
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
