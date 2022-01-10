@@ -1,3 +1,11 @@
+Forked from larribas' MLFlow helm repository. 
+
+Changes:
+- Removed airflow
+- Added postgres install script
+- Modified to run alongside a Domino Installation 
+
+Original Readme follows
 # Helm Charts
 
 This is my personal Helm Chart repository. You can point helm to it via

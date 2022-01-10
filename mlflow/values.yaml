@@ -19,6 +19,10 @@ extraArgs: {}
   # workers: 2
   # expose-prometheus: yes
 
+persistence:
+   storageClass: dominodisk
+   size: 30Gi
+
 replicaCount: 1
 
 image:
@@ -29,6 +33,15 @@ image:
 
   # image.tag -- The tag for the repository (e.g. 'latest')
   tag: 1.22
+
+proxyImage:
+  pullPolicy: Always
+
+  # image.repository -- The fully qualified name of the docker image to use
+  repository: vaibhavdhawan/mlflow
+
+  # image.tag -- The tag for the repository (e.g. 'latest')
+  tag: proxyv1
 
 imagePullSecrets: []
 nameOverride: ""
@@ -54,7 +67,7 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: NodePort
+  type: ClusterIP
   port: 5000
 
 ingress:
@@ -67,7 +80,7 @@ ingress:
       rewrite "(?i)/mlflow$" / break;
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: fieldregistry.cs.domino.tech
+    - host: mlflowtest.cs.domino.tech #fieldregistry.cs.domino.tech
 
       # ingress.hosts[0].paths -- A list of objects. Each object should contain a `path` key, and may contain a `serviceNameOverride` and a `servicePortOverride` key. If you do not specify any overrides, the Chart will use the ones for the service it creates automatically. We allow overrides to allow advanced behavior like SSL redirection on the AWS ALB Ingress Controller.
       paths: 
@@ -75,10 +88,10 @@ ingress:
       # - path: "/*"
       #   serviceNameOverride: chart-example
       #   servicePortOverride: 80
-  tls: 
-    - secretName: tls-ingress
-      hosts:
-        - fieldregistry.cs.domino.tech
+  #tls: 
+  #  - secretName: tls-ingress
+  #    hosts:
+  #      - fieldregistry.cs.domino.tech
 
 resources: {}
   # limits:
@@ -99,3 +112,8 @@ prometheus:
   expose: false
 
 podAnnotations: {}
+
+proxyConfig:
+  port: 6001
+  rootDir: "/"
+  resources: {}

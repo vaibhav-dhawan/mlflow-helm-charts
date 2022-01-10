@@ -28,6 +28,29 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
+        - name: {{ .Chart.Name }}-proxy
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.proxyImage.repository }}:{{ .Values.proxyImage.tag }}"
+          imagePullPolicy: {{ .Values.proxyImage.pullPolicy }}
+          args:
+            - "http://localhost/"
+            - "{{ .Values.proxyConfig.rootDir }}"
+            - "{{ .Values.proxyConfig.port }}"
+          ports:
+            - name: proxy
+              containerPort: {{ .Values.proxyConfig.port }}
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: proxy
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: proxy
+          resources:
+            {{- toYaml .Values.proxyConfig.resources | nindent 12 }}
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
