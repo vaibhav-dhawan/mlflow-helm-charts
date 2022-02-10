@@ -54,6 +54,14 @@ spec:
           env:
            - name: DOMINO_API_HOST
              value: "http://nucleus-frontend.domino-platform:80"
+          {{ if .Values.awsAccessKeyID}}
+          {{ if .Values.awsDefaultRegion}}
+           - name: AWS_ACCESS_KEY_ID
+             value: {{.Values.awsAccessKeyID}}
+           - name: AWS_DEFAULT_REGION
+             value: {{.Values.awsDefaultRegion}}
+          {{end}}
+          {{end}}
           volumeMounts:
             - mountPath: "/mnt/mlflow"
               name: mlflow-store
@@ -86,6 +94,11 @@ spec:
                 secretKeyRef:
                   name: {{ include "mlflow.postgresSecretName" . }}
                   key: password
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mlflow.awsSecretAccessKey" . }}
+                  key: awsSecretAccessKey
           {{- end }}
           ports:
             - name: http
