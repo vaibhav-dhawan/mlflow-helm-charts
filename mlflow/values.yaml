@@ -12,7 +12,13 @@ backendStore:
      database: mlflow
 
 # defaultArtifactRoot -- A local or remote filepath (e.g. s3://my-bucket). It is mandatory when specifying a database backend store
-defaultArtifactRoot: /mnt/mlflow
+defaultArtifactRoot: /mnt/mlflow 
+
+# aws -- AWS specific access credentials if defaultArtifactRoot references an s3 bucket
+aws:
+  defaultRegion: us-west-2
+  accessKeyID: ""
+  secretAccessKey: ""
 
 # extraArgs -- A map of arguments and values to pass to the `mlflow server` command
 extraArgs: {}

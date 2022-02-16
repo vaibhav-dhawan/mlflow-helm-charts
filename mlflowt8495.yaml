@@ -1,5 +1,6 @@
 #helm upgrade mlflow --namespace mlflow ./mlflow --set persistence.storageClass=managed-premium
 defaultArtifactRoot: s3://mlflow-domino-artifacts-946429944765
-awsAccessKeyID: AKIA5YW464O6WQ5NH3PH
-awsDefaultRegion: us-west-2
-awsSecretAccessKey: secret
+aws:
+  defaultRegion: us-west-2
+  accessKeyID: AKIA5YW464O6WQ5NH3PH
+  secretAccessKey: secret
