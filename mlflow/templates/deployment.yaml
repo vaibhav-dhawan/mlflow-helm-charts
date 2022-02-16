@@ -93,6 +93,7 @@ spec:
           {{- range $key, $value := .Values.extraArgs }}
             - --{{ $key }}={{ $value }}
           {{- end }}
+          {{- if or .Values.backendStore.postgres .Values.aws }}
           env:
             {{- if .Values.backendStore.postgres }}
             - name: SECRET_PASSWORD
@@ -115,6 +116,7 @@ spec:
                     name: {{ include "mlflow.awsSecretAccessKey" . }}
                     key: awsSecretAccessKey
             {{- end }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 80
