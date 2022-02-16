@@ -16,9 +16,10 @@ defaultArtifactRoot: /mnt/mlflow
 
 # aws -- AWS specific access credentials if defaultArtifactRoot references an s3 bucket
 aws:
+  enabled: False
   defaultRegion: us-west-2
-  accessKeyID: ""
-  secretAccessKey: ""
+  accessKeyID:
+  secretAccessKey:
 
 # extraArgs -- A map of arguments and values to pass to the `mlflow server` command
 extraArgs: {}
