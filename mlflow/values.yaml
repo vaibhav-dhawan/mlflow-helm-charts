@@ -12,7 +12,14 @@ backendStore:
      database: mlflow
 
 # defaultArtifactRoot -- A local or remote filepath (e.g. s3://my-bucket). It is mandatory when specifying a database backend store
-defaultArtifactRoot: /mnt/mlflow
+defaultArtifactRoot: /mnt/mlflow 
+
+# aws -- AWS specific access credentials if defaultArtifactRoot references an s3 bucket
+aws:
+  enabled: False
+  defaultRegion: us-west-2
+  accessKeyID:
+  secretAccessKey:
 
 # extraArgs -- A map of arguments and values to pass to the `mlflow server` command
 extraArgs: {}
@@ -79,12 +86,11 @@ ingress:
       rewrite "(?i)/mlflow/(.*)" /$1 break;
       rewrite "(?i)/mlflow$" / break;
     # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: mlflowtest.cs.domino.tech #fieldregistry.cs.domino.tech
-
+  hosts: []
+    #- host: mlflowtest.cs.domino.tech #fieldregistry.cs.domino.tech
       # ingress.hosts[0].paths -- A list of objects. Each object should contain a `path` key, and may contain a `serviceNameOverride` and a `servicePortOverride` key. If you do not specify any overrides, the Chart will use the ones for the service it creates automatically. We allow overrides to allow advanced behavior like SSL redirection on the AWS ALB Ingress Controller.
-      paths: 
-        - path: "/mlflow/?(.*)"
+     # paths: 
+      #  - path: "/mlflow/?(.*)"
       # - path: "/*"
       #   serviceNameOverride: chart-example
       #   servicePortOverride: 80

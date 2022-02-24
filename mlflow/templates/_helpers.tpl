@@ -65,3 +65,7 @@ Create the name of the service account to use
 {{- define "mlflow.postgresSecretName" -}}
 {{- printf "%s-postgres" (include "mlflow.fullname" .) -}}
 {{- end -}}
+
+{{- define "mlflow.awsSecretAccessKey" -}}
+{{- printf "%s-aws-sak" (include "mlflow.fullname" .) -}}
+{{- end -}}

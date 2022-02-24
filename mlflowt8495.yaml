@@ -1,0 +1,23 @@
+#helm upgrade mlflow --namespace mlflow ./mlflow --set persistence.storageClass=managed-premium
+# helm template mlflow --namespace mlflow ./mlflow -f mlflowt8495.yaml > template.yaml
+defaultArtifactRoot: s3://mlflow-domino-artifacts-946429944765
+
+keycloak:
+  hostname: "test"
+  clientSecret: "test2"
+
+aws:
+  enabled: True
+  defaultRegion: us-west-2
+  accessKeyID: test
+  secretAccessKey: test
+
+ingress:
+  hosts:
+    - host: mlflowtest.cs.domino.tech #fieldregistry.cs.domino.tech
+      paths: 
+        - path: "/mlflow/?(.*)"
+
+
+# persistence:
+#   storageClass: managed-premium

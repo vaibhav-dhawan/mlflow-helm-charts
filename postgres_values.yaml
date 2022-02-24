@@ -1,3 +1,4 @@
+# bitnami//  helm install -f postgres_values.yaml mlflow-postgres bitnami/postgresql -n mlflow --set persistence.storageClass=managed-premium
 global:
   postgresql:
     postgresqlDatabase: mlflow
@@ -6,4 +7,3 @@ global:
 persistence:
   storageClass: dominodisk
   size: 30Gi
-  

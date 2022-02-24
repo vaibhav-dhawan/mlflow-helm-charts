@@ -52,8 +52,22 @@ spec:
           resources:
             {{- toYaml .Values.proxyConfig.resources | nindent 12 }}
           env:
-           - name: DOMINO_API_HOST
-             value: "http://nucleus-frontend.domino-platform:80"
+            - name: DOMINO_API_HOST
+              value: "http://nucleus-frontend.domino-platform:80"
+            {{- if .Values.aws.enabled }}
+            - name: AWS_DEFAULT_REGION
+              value: {{.Values.aws.defaultRegion }}
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mlflow.awsSecretAccessKey" . }}
+                  key: awsAccessKeyID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mlflow.awsSecretAccessKey" . }}
+                  key: awsSecretAccessKey
+            {{- end }}
           volumeMounts:
             - mountPath: "/mnt/mlflow"
               name: mlflow-store
@@ -79,13 +93,29 @@ spec:
           {{- range $key, $value := .Values.extraArgs }}
             - --{{ $key }}={{ $value }}
           {{- end }}
-          {{- if .Values.backendStore.postgres }}
+          {{- if or .Values.backendStore.postgres .Values.aws.enaled }}
           env:
+            {{- if .Values.backendStore.postgres }}
             - name: SECRET_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mlflow.postgresSecretName" . }}
                   key: password
+            {{- end }}
+            {{- if .Values.aws.enabled }}
+            - name: AWS_DEFAULT_REGION
+              value: {{ .Values.aws.defaultRegion }}
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mlflow.awsSecretAccessKey" . }}
+                  key: awsAccessKeyID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mlflow.awsSecretAccessKey" . }}
+                  key: awsSecretAccessKey
+            {{- end }}
           {{- end }}
           ports:
             - name: http
